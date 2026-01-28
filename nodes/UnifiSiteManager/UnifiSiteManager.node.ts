@@ -2,12 +2,14 @@ import { INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflo
 
 import { siteOperations, siteFields } from './descriptions/SiteDescription';
 import { hostOperations, hostFields } from './descriptions/HostDescription';
+import { ispMetricsOperations, ispMetricsFields } from './descriptions/ISPMetricDescription';
+import { sdwanOperations, sdwanFields } from './descriptions/SDWANDescription';
 
 export class UnifiSiteManager implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'UniFi Site Manager',
 		name: 'unifiSiteManager',
-		icon: 'fa:network-wired',
+		icon: 'file:Unifi.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -48,6 +50,10 @@ export class UnifiSiteManager implements INodeType {
 						value: 'ispMetrics',
 					},
 					{
+						name: 'SD-WAN',
+						value: 'sdwan',
+					},
+					{
 						name: 'Site',
 						value: 'site',
 					},
@@ -59,6 +65,10 @@ export class UnifiSiteManager implements INodeType {
 			...siteFields,
 			...hostOperations,
 			...hostFields,
+			...ispMetricsOperations,
+			...ispMetricsFields,
+			...sdwanOperations,
+			...sdwanFields,
 		],
 	};
 }

@@ -8,7 +8,7 @@ import {
 export class UnifiSiteManagerApi implements ICredentialType {
 	name = 'unifiSiteManagerApi';
 	displayName = 'UniFi Site Manager API';
-	icon = 'file:UnifiSiteManager.svg' as Icon;
+	icon = 'file:Unifi.svg' as Icon;
 	documentationUrl = 'https://developer.ui.com/';
 	properties: INodeProperties[] = [
 		{

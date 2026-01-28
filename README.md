@@ -1,78 +1,98 @@
-# n8n-nodes-zorus
+# n8n-nodes-ui-site-manager
 
-This is an n8n community node. It lets you use Zorus in your n8n workflows.
+This is an n8n community node. It lets you use UniFi Site Manager in your n8n workflows.
 
-Zorus is a comprehensive endpoint security and management platform that provides advanced threat protection, policy management, and endpoint control capabilities for organizations.
+UniFi Site Manager is Ubiquiti's cloud-based management platform that provides centralized management and monitoring of UniFi network devices, sites, and infrastructure across multiple locations.
 
-This node provides comprehensive operations for managing customers, deployment tokens, endpoints, groups, policies, and unblock requests through the Zorus API.
+This node provides comprehensive operations for managing sites, hosts, devices, ISP metrics, and SD-WAN configurations through the UniFi Site Manager API.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
-[Installation](#installation)  
-[Operations](#operations)  
-[Credentials](#credentials)  
-[Compatibility](#compatibility)  
+[Installation](#installation)
+[Operations](#operations)
+[Credentials](#credentials)
+[Compatibility](#compatibility)
+[API Version](#api-version)
 [Resources](#resources)
 
 ## Installation
 
 Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
 
+Community node package name: `@n8layer/n8n-nodes-ui-site-manager`
+
 ## Operations
 
-This node supports the following operations:
+This node supports the following operations based on the UniFi Site Manager API v1.0.0:
 
-### Customer
-- **Search Customers**: Retrieve a list of customers with optional filtering by name, UUID, enabled status, and creation date with pagination support
-- **Create Customer**: Create a new customer with a name and base policy UUID
+### Site
+- **List Sites**: Retrieve a list of all sites with optional pagination support
+  - Optional parameters: pageSize, nextToken
+- **List Devices**: Retrieve a list of UniFi devices managed by hosts
+  - Optional parameters: hostIds (comma-separated), time (RFC3339 format), pageSize, nextToken
 
-### Deployment Token
-- **Create Deployment Token**: Create a new deployment token for a specific group with a given name
+### Host
+- **List Hosts**: Retrieve a list of all hosts in your deployment
+  - Optional parameters: pageSize, nextToken
+- **Get Host by ID**: Get detailed information about a specific host by its unique identifier
+  - Required parameter: hostId
 
-### Endpoint
-- **Search Endpoints**: Retrieve a list of endpoints with comprehensive filtering options including name, UUID, license ID, customer UUID, group UUID, agent state, and last seen date with pagination support
-- **Enable Endpoint**: Enable a specific endpoint by UUID
-- **Disable Endpoint**: Disable a specific endpoint by UUID
-- **Isolate Endpoint**: Isolate a specific endpoint by UUID for security purposes
-- **Release Endpoint**: Release an isolated endpoint by UUID
-- **Restart Service**: Restart the service on a specific endpoint by UUID
+### ISP Metric
+- **Get ISP Metrics**: Retrieve ISP metrics data for all sites linked to the API key
+  - Required parameter: type (5m for 5-minute intervals or 1h for 1-hour intervals)
+  - Optional parameters: beginTimestamp (RFC3339), endTimestamp (RFC3339), duration (e.g., 24h, 7d)
+  - 5-minute interval metrics are available for at least 24 hours
+  - 1-hour interval metrics are available for at least 30 days
+- **Query ISP Metrics**: Retrieve ISP metrics data based on specific query parameters
+  - Required parameter: type (5m or 1h)
+  - Required body parameter: sites (JSON array with hostId, siteId, and optional timestamps)
 
-### Group
-- **Groups Search**: Retrieve a list of groups with filtering options by name, UUID, policy UUID, customer UUID, and synchronization settings with pagination support
-- **Create Group**: Create a new group with a customer UUID, name, and optional base policy UUID
-
-### Policy
-- **Search Policy**: Retrieve a list of policies with filtering options by UUID, group UUID, group name, customer name, customer UUID, and creation date with pagination support
-
-### Unblock Request
-- **Unblock Request**: Search for active unblock requests with filtering options by customer UUID, policy UUID, logged-on user, and request date with pagination support
+### SD-WAN
+- **List SD-WAN Configs**: Retrieve a list of all SD-WAN configurations
+- **Get SD-WAN Config by ID**: Get detailed information about a specific SD-WAN configuration
+  - Required parameter: configId
+- **Get SD-WAN Config Status**: Get the current status of a specific SD-WAN configuration
+  - Required parameter: configId
 
 ## Credentials
 
-To use this node, you'll need to set up API credentials with Zorus. Here's how:
+To use this node, you'll need to set up API credentials with UniFi. Here's how:
 
-1. **Access your Zorus portal**:
-   - Log in to your Zorus admin portal
-   - Navigate to **API Settings** or **Developer Tools**
+1. **Access your UI.com account**:
+   - Log in to your [UI.com account](https://account.ui.com/)
+   - Navigate to **API Settings** or **Developer Console**
 
 2. **Generate API Token**:
-   - Create a new API token
-   - Copy the generated token
+   - Create a new API token with appropriate permissions
+   - Copy the generated token securely
 
 3. **In n8n**:
-   - Create new credentials for "Zorus API"
-   - Enter the API Token from your Zorus portal
-   - The Base URL will default to: `https://developer.zorustech.com/api`
+   - Create new credentials for "UniFi Site Manager API"
+   - Enter the API Token from your UI.com account
+   - The Base URL will default to: `https://api.ui.com`
    - Save the credentials
+
+**Note**: Ensure your API token has the necessary permissions to access the resources and operations you intend to use. The API uses X-API-KEY header authentication.
 
 ## Compatibility
 
 This node is compatible with n8n version 1.82.0 and above.
 
+## API Version
+
+This node is built for **UniFi Site Manager API v1.0.0**.
+
+The API base URL is: `https://api.ui.com`
+
+All endpoints use the `/v1/` prefix.
+
 ## Resources
 
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
-* [Zorus](https://zorustech.com/)
-* [Zorus API Documentation](https://developer.zorustech.com/api/docs/index.html)
+* [UniFi](https://ui.com/)
+* [UniFi Site Manager API Documentation](https://developer.ui.com/site-manager-api/)
+* [Get ISP Metrics Documentation](https://developer.ui.com/site-manager-api/get-isp-metrics)
+* [Query ISP Metrics Documentation](https://developer.ui.com/site-manager-api/queryispmetrics/)
+* [UI.com Account Management](https://account.ui.com/)
 
 
